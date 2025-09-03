@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Club Members</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>👥 Club Members</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="events.html">Events</a>
+      <a href="members.html">Members</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="form-section">
+      <h2>Add New Member</h2>
+      <form id="memberForm">
+        <input type="text" id="memberName" placeholder="Full Name" required>
+        <input type="email" id="memberEmail" placeholder="Email Address" required>
+        <button type="submit">Add Member</button>
+      </form>
+    </section>
+
+    <section class="list-section">
+      <h2>Registered Members</h2>
+      <ul id="memberList"></ul>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
