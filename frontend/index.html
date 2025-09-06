@@ -1,35 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Club Activity Portal</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Navigation -->
   <header>
-    <h1>🎓 Club Activity Portal</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="events.html">Events</a>
-      <a href="members.html">Members</a>
+    <nav class="navbar">
+      <div class="logo">Club Portal</div>
+      <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Events</a></li>
+        <li><a href="#">Updates</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
     </nav>
   </header>
 
-  <main>
-    <h2>Welcome to the Club Portal!</h2>
-    <p>Here you can check upcoming events, club announcements, and manage memberships.</p>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Welcome to the Club Activity Portal</h1>
+      <p>Discover events, stay updated, and be part of the community!</p>
+      <a href="#events" class="btn">Explore Events</a>
+    </div>
+  </section>
 
-    <section id="announcements">
-      <h3>📢 Latest Announcements</h3>
-      <ul id="announcementList">
-        <!-- announcements will load dynamically -->
-      </ul>
-    </section>
-  </main>
+  <!-- Events Section -->
+  <section id="events" class="events-section">
+    <h2>Upcoming Events</h2>
+    <div class="events-grid" id="events-container">
+      <!-- Event cards will be injected here by script.js -->
+    </div>
+  </section>
 
+  <!-- Footer -->
   <footer>
-    <p>&copy; 2025 Club Activity Portal</p>
+    <p>© 2025 Club Activity Portal | All Rights Reserved</p>
   </footer>
 
   <script src="script.js"></script>
