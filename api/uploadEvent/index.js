@@ -2,7 +2,15 @@ const { BlobServiceClient } = require("@azure/storage-blob");
 
 module.exports = async function (context, req) {
     try {
-        const eventData = req.body;
+        // ✅ Support both JSON body (Postman/curl) and query params (browser)
+        const eventData = req.body && Object.keys(req.body).length > 0 
+            ? req.body 
+            : {
+                title: req.query.title,
+                date: req.query.date,
+                description: req.query.description
+            };
+
         if (!eventData || !eventData.title) {
             context.res = { status: 400, body: "Invalid event data. 'title' is required." };
             return;
