@@ -3,86 +3,95 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Event</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Admin - Manage Events</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .admin-container {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 40px;
+      padding: 40px;
+    }
+    .form-card, .list-card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    .form-card h2, .list-card h2 {
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      color: #222;
+    }
+    form input, form textarea, form button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    form button {
+      background: #f39c12;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    form button:hover {
+      background: #d35400;
+    }
+    #eventList {
+      list-style: none;
+      padding: 0;
+    }
+    #eventList li {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    #eventList strong {
+      color: #333;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Navigation -->
-    <nav>
-      <a href="index.html">🏠 Home</a> |
-      <a href="events.html">➕ Add Event</a>
+  <header>
+    <nav class="navbar">
+      <div class="logo">Club Portal - Admin</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="events.html" class="active">Manage Events</a></li>
+        <li><a href="members.html">Manage Members</a></li>
+      </ul>
     </nav>
+  </header>
 
-    <h1>Club Activity Portal</h1>
-    <h2>Add a New Event</h2>
-
-    <!-- Event Form -->
-    <div class="card">
+  <main class="admin-container">
+    <!-- Add Event Form -->
+    <section class="form-card">
+      <h2>Add New Event</h2>
       <form id="eventForm">
-        <label for="title">Event Title</label>
-        <input type="text" id="title" name="title" required>
-
-        <label for="date">Event Date</label>
-        <input type="date" id="date" name="date" required>
-
-        <label for="description">Description</label>
-        <textarea id="description" name="description" required></textarea>
-
+        <input type="text" id="eventName" placeholder="Event Name" required>
+        <input type="date" id="eventDate" required>
+        <textarea id="eventDescription" placeholder="Event Description"></textarea>
         <button type="submit">Add Event</button>
       </form>
-    </div>
+    </section>
 
-    <!-- Success/Error Message -->
-    <div id="message"></div>
+    <!-- Event List -->
+    <section class="list-card">
+      <h2>Upcoming Events</h2>
+      <ul id="eventList"></ul>
+    </section>
+  </main>
 
-    <h2>Recently Added Events</h2>
-    <div id="eventsList"></div>
-  </div>
+  <footer>
+    <p>© 2025 Club Activity Portal | Admin Dashboard</p>
+  </footer>
 
-  <script>
-    const form = document.getElementById("eventForm");
-    const messageDiv = document.getElementById("message");
-    const eventsList = document.getElementById("eventsList");
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const event = {
-        title: document.getElementById("title").value,
-        date: document.getElementById("date").value,
-        description: document.getElementById("description").value
-      };
-
-      try {
-        const response = await fetch("/api/uploadEvent", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(event)
-        });
-
-        if (response.ok) {
-          const result = await response.json();
-          messageDiv.innerHTML = `<p style="color:green">${result.message}</p>`;
-          
-          // Add to preview list
-          const card = document.createElement("div");
-          card.classList.add("card");
-          card.innerHTML = `
-            <h3>${event.title}</h3>
-            <p><strong>Date:</strong> ${event.date}</p>
-            <p>${event.description}</p>
-          `;
-          eventsList.prepend(card);
-
-          form.reset();
-        } else {
-          messageDiv.innerHTML = `<p style="color:red">Error adding event.</p>`;
-        }
-      } catch (err) {
-        messageDiv.innerHTML = `<p style="color:red">Something went wrong.</p>`;
-      }
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
