@@ -3,14 +3,16 @@ const { BlobServiceClient } = require("@azure/storage-blob");
 module.exports = async function (context, req) {
     try {
         const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
-        const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
+        if (!connectionString) {
+            throw new Error("AZURE_STORAGE_CONNECTION_STRING is not configured.");
+        }
 
-        const containerName = "club-events"; // the same container you used in uploadEvent
+        const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
+        const containerName = "club-events";
         const containerClient = blobServiceClient.getContainerClient(containerName);
 
         let events = [];
 
-        // Go through all files (JSONs) in the container
         for await (const blob of containerClient.listBlobsFlat()) {
             const blobClient = containerClient.getBlobClient(blob.name);
             const downloadResponse = await blobClient.download();
@@ -18,19 +20,12 @@ module.exports = async function (context, req) {
             events.push(JSON.parse(content));
         }
 
-        context.res = {
-            status: 200,
-            body: events
-        };
+        context.res = { status: 200, body: events };
     } catch (error) {
-        context.res = {
-            status: 500,
-            body: { error: error.message }
-        };
+        context.res = { status: 500, body: { error: error.message } };
     }
 };
 
-// Helper to convert stream → string
 async function streamToString(readableStream) {
     return new Promise((resolve, reject) => {
         const chunks = [];
