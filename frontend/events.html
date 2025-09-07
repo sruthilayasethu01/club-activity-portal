@@ -3,36 +3,86 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Club Events</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Add Event</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>📅 Club Events</h1>
+  <div class="container">
+    <!-- Navigation -->
     <nav>
-      <a href="index.html">Home</a>
-      <a href="events.html">Events</a>
-      <a href="members.html">Members</a>
+      <a href="index.html">🏠 Home</a> |
+      <a href="events.html">➕ Add Event</a>
     </nav>
-  </header>
 
-  <main>
-    <section class="form-section">
-      <h2>Add New Event</h2>
+    <h1>Club Activity Portal</h1>
+    <h2>Add a New Event</h2>
+
+    <!-- Event Form -->
+    <div class="card">
       <form id="eventForm">
-        <input type="text" id="eventName" placeholder="Event Name" required>
-        <input type="date" id="eventDate" required>
-        <textarea id="eventDescription" placeholder="Event Description"></textarea>
+        <label for="title">Event Title</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="date">Event Date</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="description">Description</label>
+        <textarea id="description" name="description" required></textarea>
+
         <button type="submit">Add Event</button>
       </form>
-    </section>
+    </div>
 
-    <section class="list-section">
-      <h2>Upcoming Events</h2>
-      <ul id="eventList"></ul>
-    </section>
-  </main>
+    <!-- Success/Error Message -->
+    <div id="message"></div>
 
-  <script src="script.js"></script>
+    <h2>Recently Added Events</h2>
+    <div id="eventsList"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById("eventForm");
+    const messageDiv = document.getElementById("message");
+    const eventsList = document.getElementById("eventsList");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const event = {
+        title: document.getElementById("title").value,
+        date: document.getElementById("date").value,
+        description: document.getElementById("description").value
+      };
+
+      try {
+        const response = await fetch("/api/uploadEvent", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(event)
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          messageDiv.innerHTML = `<p style="color:green">${result.message}</p>`;
+          
+          // Add to preview list
+          const card = document.createElement("div");
+          card.classList.add("card");
+          card.innerHTML = `
+            <h3>${event.title}</h3>
+            <p><strong>Date:</strong> ${event.date}</p>
+            <p>${event.description}</p>
+          `;
+          eventsList.prepend(card);
+
+          form.reset();
+        } else {
+          messageDiv.innerHTML = `<p style="color:red">Error adding event.</p>`;
+        }
+      } catch (err) {
+        messageDiv.innerHTML = `<p style="color:red">Something went wrong.</p>`;
+      }
+    });
+  </script>
 </body>
 </html>
