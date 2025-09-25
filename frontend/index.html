@@ -1,52 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Club Activity Portal</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events</title>
+  <style>
+    body { font-family: 'Arial', sans-serif; margin: 0; padding: 0; background: #f0f2f5; }
+    header { background: #4CAF50; color: white; padding: 20px; text-align: center; }
+    h2 { margin-top: 40px; text-align: center; color: #333; }
+    .events-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px; }
+    .event-card {
+      background: white; 
+      border-radius: 10px; 
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+      padding: 15px; 
+      width: 250px; 
+      transition: transform 0.2s;
+    }
+    .event-card:hover { transform: translateY(-5px); }
+    .event-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; }
+    .event-card h3 { margin: 10px 0 5px; font-size: 20px; color: #333; }
+    .event-card p { font-size: 14px; color: #666; }
+    .event-card .date { font-weight: bold; color: #4CAF50; margin-top: 8px; }
+    .today { border: 2px solid #FF5722; }
+    .today h3, .today .date { color: #FF5722; }
+  </style>
 </head>
 <body>
-  <!-- Navigation -->
-  <header>
-    <nav class="navbar">
-      <div class="logo">Club Portal</div>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="events.html">Events</a></li>
-        <li><a href="updates.html">Updates</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="login.html">Login</a></li>
 
-      </ul>
-    </nav>
+  <header>
+    <h1>Our Events</h1>
   </header>
 
- <section id="home">
-  <!-- Hero section here -->
-</section>
+  <h2>Today's Event</h2>
+  <div id="todayEvents" class="events-container"></div>
 
-<section id="events">
   <h2>Upcoming Events</h2>
-  <div id="eventsList"></div>
-</section>
+  <div id="upcomingEvents" class="events-container"></div>
 
-<section id="updates">
-  <h2>Latest Updates</h2>
-  <p>Coming soon...</p>
-</section>
+  <script>
+    async function fetchEvents() {
+      try {
+        const res = await fetch('https://<YOUR-API-ENDPOINT>/getEvents');
+        const events = await res.json();
+        displayEvents(events);
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    }
 
-<section id="contact">
-  <h2>Contact Us</h2>
-  <p>Email: club@example.com</p>
-</section>
+    function displayEvents(events) {
+      const today = new Date();
+      today.setHours(0,0,0,0); // ignore time for comparison
 
+      const todayContainer = document.getElementById('todayEvents');
+      const upcomingContainer = document.getElementById('upcomingEvents');
 
-  <!-- Footer -->
-  <footer>
-    <p>© 2025 Club Activity Portal | All Rights Reserved</p>
-  </footer>
+      todayContainer.innerHTML = '';
+      upcomingContainer.innerHTML = '';
 
-  <script src="script.js"></script>
+      events.forEach(event => {
+        const eventDate = new Date(event.date);
+        eventDate.setHours(0,0,0,0);
+
+        const card = document.createElement('div');
+        card.className = 'event-card';
+        card.innerHTML = `
+          <img src="${event.imageUrl || 'https://via.placeholder.com/250x150'}" alt="${event.title}">
+          <h3>${event.title}</h3>
+          <p>${event.description}</p>
+          <p class="date">${event.date}</p>
+        `;
+
+        if (eventDate.getTime() === today.getTime()) {
+          card.classList.add('today');
+          todayContainer.appendChild(card);
+        } else if (eventDate > today) {
+          upcomingContainer.appendChild(card);
+        }
+      });
+
+      if (!todayContainer.hasChildNodes()) {
+        todayContainer.innerHTML = '<p style="color:#666;">No events today.</p>';
+      }
+
+      if (!upcomingContainer.hasChildNodes()) {
+        upcomingContainer.innerHTML = '<p style="color:#666;">No upcoming events.</p>';
+      }
+    }
+
+    fetchEvents();
+  </script>
 </body>
 </html>
