@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Club Portal</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">Club Portal</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="updates.html">Updates</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="login">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <label for="role">I am a:</label>
+      <select id="role" name="role" required>
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select>
+
+      <label for="username">Username</label>
+      <input type="text" id="username" required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" required />
+
+      <button type="submit">Login</button>
+    </form>
+    <p id="loginMessage"></p>
+  </section>
+
+  <footer>
+    <p>© 2025 Club Activity Portal | All Rights Reserved</p>
+  </footer>
+
+  <script>
+    const loginForm = document.getElementById("loginForm");
+    const message = document.getElementById("loginMessage");
+
+    loginForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const role = document.getElementById("role").value;
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      // Simple mock authentication (replace later with Azure / DB check)
+      if (role === "admin" && username === "admin" && password === "admin123") {
+        message.textContent = "✅ Admin login successful!";
+        window.location.href = "admin-dashboard.html"; // Redirect to admin page
+      } else if (role === "user") {
+        message.textContent = "✅ User login successful!";
+        window.location.href = "index.html"; // Normal user goes back to home
+      } else {
+        message.textContent = "❌ Invalid credentials!";
+      }
+    });
+  </script>
+</body>
+</html>

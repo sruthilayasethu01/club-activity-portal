@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | Club Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .dashboard {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 2rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #f9f9f9;
+    }
+    .dashboard h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .dashboard label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    .dashboard input, .dashboard textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .dashboard button {
+      margin-top: 1.5rem;
+      width: 100%;
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .dashboard button:hover {
+      background: #0056b3;
+    }
+    #preview {
+      margin-top: 2rem;
+    }
+    .event-card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+      background: white;
+    }
+    .event-card img {
+      width: 100%;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">Club Portal - Admin</div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="updates.html">Updates</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="login.html">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="dashboard">
+    <h2>Add New Event</h2>
+    <form id="eventForm">
+      <label for="title">Event Title</label>
+      <input type="text" id="title" required />
+
+      <label for="date">Event Date</label>
+      <input type="date" id="date" required />
+
+      <label for="description">Description</label>
+      <textarea id="description" rows="3" required></textarea>
+
+      <label for="image">Upload Image</label>
+      <input type="file" id="image" accept="image/*" required />
+
+      <button type="submit">Add Event</button>
+    </form>
+
+    <div id="preview">
+      <h3>Preview</h3>
+      <div id="eventPreview"></div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Club Activity Portal | All Rights Reserved</p>
+  </footer>
+
+  <script>
+    const form = document.getElementById("eventForm");
+    const eventPreview = document.getElementById("eventPreview");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const title = document.getElementById("title").value;
+      const date = document.getElementById("date").value;
+      const description = document.getElementById("description").value;
+      const imageFile = document.getElementById("image").files[0];
+
+      if (!imageFile) {
+        alert("Please upload an image.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const eventHTML = `
+          <div class="event-card">
+            <img src="${e.target.result}" alt="${title}" />
+            <h3>${title}</h3>
+            <p><strong>Date:</strong> ${date}</p>
+            <p>${description}</p>
+          </div>
+        `;
+        eventPreview.innerHTML = eventHTML;
+
+        // TODO: Save event to backend API
+        alert("Event added successfully (currently preview only)");
+      };
+      reader.readAsDataURL(imageFile);
+    });
+  </script>
+</body>
+</html>

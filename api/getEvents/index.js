@@ -10,8 +10,7 @@ module.exports = async function (context, req) {
         const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
         const containerName = "club-events";
         const containerClient = blobServiceClient.getContainerClient(containerName);
-
-        let events = [];
+                let events = [];
 
         for await (const blob of containerClient.listBlobsFlat()) {
             const blobClient = containerClient.getBlobClient(blob.name);
